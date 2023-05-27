@@ -44,7 +44,7 @@ if (!empty($id)) {
         </label>
         <br>
         <label>
-            <input type="hidden" name="codigoEstudiante" min="1" value="<?php echo $actividad->getNota(); ?>" required>
+            <input type="hidden" name="codigoEstudiante" min="1" value="<?php echo $actividad->getCodigoEstudiante(); ?>" required>
         </label>
         <br>
         <button type="submit">Guardar</button>

@@ -19,3 +19,6 @@ if ($resultado) {
 } else {
     echo '<h1>No se pudo registrar el estudiante</h1>';
 }
+?>
+<br>
+<a href="../estudiantes.php">Volver al inicio</a>

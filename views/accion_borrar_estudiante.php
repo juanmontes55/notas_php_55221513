@@ -13,3 +13,6 @@ if ($resultado) {
 } else {
     echo '<h1>No se pudo borrar el estudiante</h1>';
 }
+?>
+<br>
+<a href="../estudiantes.php">Volver al inicio</a>
