@@ -4,49 +4,95 @@ require 'controllers/conexionDbController.php';
 require 'controllers/baseController.php';
 require 'controllers/actividadController.php';
 
-use actividadController\ActividadController;
+use estudiante\Estudiante;
+use actividad\Actividad;
+use ActividadController\actividadController;
 
-$actividadController = new ActividadController();
+$contadorNotas = 0;
+    $sumaNotas = 0;
 
-$actividades = $actividadController->read();
+    $codigo = $_GET['codigo'];
+    $nombre = $_GET['nombre'];
+    $apellido = $_GET['apellido'];
+    
+    $actividadController = new ActividadController();
+    $actividades = $actividadController->read($codigo);
+
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>Lista de actividades</title>
 </head>
 
 <body>
-    <main>
-        <h1>Lista de actividades</h1>
-        <a href="views/form_actividad.php">Registrar actividad</a>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Descripción</th>
-                    <th>Nota</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                foreach ($actividades as $actividad) {
-                    echo '<tr>';
-                    echo '  <td>' . $actividad->getId() . '</td>';
-                    echo '  <td>' . $actividad->getDescripcion() . '</td>';
-                    echo '  <td>' . $actividad->getNota() . '</td>';
-                    echo '  <td>';
-                    echo '      <a href="views/form_actividad.php?id=' . $actividad->getId() . '">modificar</a>';
-                    echo '      <a href="views/accion_borrar_actividad.php?id=' . $actividad->getId() . '">borrar</a>';
-                    echo '  </td>';
-                    echo '</tr>';
-                }
-                ?>
-            </tbody>
-        </table>
-    </main>
+    
 </body>
+
+    <main>
+            <h1>Actividades</h1>
+
+            <br>
+
+            <table class="table-bordered">
+                <thead>
+                    <tr class="table-encabezado">
+                        <th>ID</th>
+                        <th>Actividad</th>
+                        <th>Nota</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    foreach($actividades as $actividad){
+                        echo '<tr>';
+                        echo '<td>' . $actividad->getId() . '</td>';
+                        echo '<td>' . $actividad->getDescripcion() . '</td>';
+                        echo '<td>' . $actividad->getNota() . '</td>';
+                        echo '<td class="table-content">';
+                        echo '      <a href="views/form_actividad.php?id=' . $actividad->getId() . ' &codigo=' . $codigo . '&nombre=' . $nombre . '&apellido=' . $apellido . '">Modificar</a>';
+                        echo '      <a href="views/action_elim_act.php?id=' . $actividad->getId() . '&codigo=' . $codigo . '&nombre=' . $nombre . '&apellido=' . $apellido . '">Eliminar</a>';
+                        echo '</td>';
+                        echo '</tr>';
+                        $contadorNotas ++;
+                        $sumaNotas = $sumaNotas + $actividad->getNota();
+                    }
+
+                    if($contadorNotas == 0){
+                        $resultado = "No hay registro de actividades";
+                    }else{
+                        $promedio = $sumaNotas / $contadorNotas;
+
+                        if($promedio >= 3){
+                            $resultado = "<label style='color: green'>" . number_format($promedio,3);
+                        }else if($promedio < 3){
+                            $resultado = "<label style='color: red'>" . number_format($promedio,3);
+                        }
+                    }
+
+                    ?>
+                </tbody>
+            </table>
+            <br>
+            <?php
+            ?>
+            <p>Promedio: <?php echo $resultado; ?></p>
+
+
+            <?php
+
+            echo '<form action="views/form_actividad.php" method="post">';
+            echo '<button type="submit">Agregar actividad</button>';
+            echo '</form>';
+
+            ?>
+
+
+            <a href="estudiantes.php">Volver</a>
+        </main>
 
 </html>
